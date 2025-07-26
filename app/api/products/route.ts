@@ -6,7 +6,11 @@ export async function GET() {
     const products = await prisma.product.findMany({
       where: { isActive: true }
     })
-    return NextResponse.json(products)
+    const serializedProducts = products.map(product => ({
+      ...product,
+      price: product.price.toString()
+    }))
+    return NextResponse.json(serializedProducts)
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to fetch products' },
