@@ -1,15 +1,14 @@
 import NextAuth from "next-auth";
-import type { AuthOptions } from "next-auth"; // Correct type import
+import type { AuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-import { PrismaClient } from "@prisma/client"; // Direct import
+import { PrismaClient } from "@prisma/client";
 
-// Instantiate the client directly in this file for the adapter.
 const prisma = new PrismaClient();
 
-// The authOptions object should NOT be exported.
-export const authOptions: AuthOptions = {
+// NO "export" on the line below. This is the fix.
+const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
@@ -40,7 +39,6 @@ export const authOptions: AuthOptions = {
           throw new Error("Invalid credentials");
         }
         
-        // Return the user object if credentials are valid
         return user;
       },
     }),
@@ -49,10 +47,9 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === "development", // Optional: for easier debugging locally
+  debug: process.env.NODE_ENV === "development",
 };
 
 const handler = NextAuth(authOptions);
 
-// These are the only valid exports from a route file.
 export { handler as GET, handler as POST };
