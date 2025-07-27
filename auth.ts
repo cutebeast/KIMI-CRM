@@ -47,4 +47,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
+  callbacks: {
+    async session({ session, token }) {
+      if (token.sub) {
+        session.user.id = token.sub
+      }
+      return session
+    }
+  }
 })
