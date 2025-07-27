@@ -1,22 +1,45 @@
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { prisma } from '@/lib/prisma'
+'use client'
+
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { useEffect, useState } from 'react'
 
-export default async function ProfilePage() {
-  const session = await auth()
+interface UserProfile {
+  name: string
+  email: string
+  profile?: {
+    loyaltyPoints: number
+    tier: string
+  }
+}
 
-  if (!session?.user) {
-    redirect('/login')
+export default function ProfilePage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [user, setUser] = useState<UserProfile | null>(null)
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/login')
+    }
+  }, [status, router])
+
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user?.id) {
+      fetch(`/api/users/${session.user.id}`)
+        .then(res => res.json())
+        .then(setUser)
+        .catch(console.error)
+    }
+  }, [status, session?.user?.id])
+
+  if (status === 'loading') {
+    return <div>Loading...</div>
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    include: { profile: true }
-  })
-
   if (!user) {
-    throw new Error('User not found')
+    return <div>Loading...</div>
   }
 
   return (
