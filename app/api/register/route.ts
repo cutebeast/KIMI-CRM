@@ -33,7 +33,10 @@ export async function POST(request: NextRequest) {
         hashedPassword,
         emailVerified: null,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        profile: {
+          create: {}
+        }
       }
     })
 
