@@ -1,11 +1,5 @@
 'use client'
-
-interface CartItem {
-  id: string
-  name: string
-  quantity: number
-  price: number
-}
+import type { CartItem } from '@/lib/types'
 
 interface ShoppingCartProps {
   cartItems: CartItem[]

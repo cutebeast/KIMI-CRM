@@ -4,20 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import AuthStatus from '@/components/AuthStatus'
 import ShoppingCart from '@/components/ShoppingCart'
-
-interface CartItem {
-  id: string
-  name: string
-  price: string
-  quantity: number
-}
-
-interface Product {
-  id: string
-  name: string
-  price: string
-  quantity: number
-}
+import type { Product, CartItem } from '@/lib/types'
 
 export default function HomePage() {
   const { data: session } = useSession()
