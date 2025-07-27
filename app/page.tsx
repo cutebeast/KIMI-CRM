@@ -56,7 +56,7 @@ export default function HomePage() {
 
       if (response.ok) {
         setCart([])
-        alert('Checkout successful!')
+        alert('Purchase successful! Points awarded.')
       } else {
         const errorData = await response.json()
         alert(`Checkout failed: ${errorData.error || 'Unknown error'}`)
