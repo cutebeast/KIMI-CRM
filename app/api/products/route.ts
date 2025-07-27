@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { getProducts } from '@/lib/data'
 
 export async function GET() {
   try {
-    const products = await prisma.product.findMany({
-      where: { isActive: true }
-    })
+    const products = await getProducts()
     const serializedProducts = products.map(product => ({
       ...product,
       price: product.price.toString()
