@@ -6,11 +6,12 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcrypt"
-import type AuthOptions from "next-auth"
 
 const prisma = new PrismaClient()
 
-export const authOptions: AuthOptions = {
+// No "export" and NO type annotation ": AuthOptions"
+// We let TypeScript infer the type, which is the modern pattern.
+export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
@@ -42,7 +43,4 @@ export const authOptions: AuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
-}
-
-// The handlers object is now exported from here
-export const { handlers, auth, signIn, signOut } = NextAuth(authOptions)
+})
