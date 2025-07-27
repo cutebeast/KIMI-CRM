@@ -1,11 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import { useSession } from 'next-auth/react'
 import { getProducts } from '@/lib/data'
 import AuthStatus from '@/components/AuthStatus'
 import ShoppingCart from '@/components/ShoppingCart'
 
 export default function HomePage() {
+  const { data: session } = useSession()
   const [cart, setCart] = useState([])
   
   // For now, we'll fetch products on the client side
@@ -32,7 +34,39 @@ export default function HomePage() {
   }
 
   const handleCheckout = async () => {
-    console.log('Checkout clicked')
+    if (!session?.user?.id) {
+      alert('Please log in to checkout')
+      return
+    }
+
+    const checkoutData = {
+      userId: session.user.id,
+      items: cart.map(item => ({
+        productId: item.id,
+        quantity: item.quantity
+      }))
+    }
+
+    try {
+      const response = await fetch('/api/transactions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(checkoutData)
+      })
+
+      if (response.ok) {
+        setCart([])
+        alert('Checkout successful!')
+      } else {
+        const errorData = await response.json()
+        alert(`Checkout failed: ${errorData.error || 'Unknown error'}`)
+      }
+    } catch (error) {
+      console.error('Checkout error:', error)
+      alert('Checkout failed: Network error')
+    }
   }
 
   const productsWithStringPrices = products.map(product => ({
