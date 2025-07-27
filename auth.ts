@@ -6,8 +6,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcrypt"
-
-const prisma = new PrismaClient()
+import { prisma } from './lib/prisma'
 
 // No "export" and NO type annotation ": AuthOptions"
 // We let TypeScript infer the type, which is the modern pattern.
