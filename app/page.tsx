@@ -5,6 +5,15 @@ import { useSession } from 'next-auth/react'
 import AuthStatus from '@/components/AuthStatus'
 import ShoppingCart from '@/components/ShoppingCart'
 import type { Product, CartItem } from '@/lib/types'
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
 
 export default function HomePage() {
   const { data: session } = useSession()
@@ -68,43 +77,40 @@ export default function HomePage() {
     }
   }
 
-  const productsWithStringPrices = products.map(product => ({
-    ...product,
-    price: product.price.toString()
-  }))
+  // products.price is already a string from the API
 
   return (
-    <div>
+    <div className="container mx-auto p-4">
       <AuthStatus />
-      <h1>Our Products</h1>
-      
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '20px',
-        justifyContent: 'center'
-      }}>
-        {productsWithStringPrices.map((product: any) => (
-          <div key={product.id} style={{
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            padding: '16px',
-            margin: '10px',
-            width: '250px',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-          }}>
-            <h2 style={{ margin: '0 0 10px 0', fontSize: '1.2rem' }}>{product.name}</h2>
-            <p style={{ margin: 0, fontWeight: 'bold', color: '#2c5aa0' }}>
-              ${parseFloat(product.price).toFixed(2)}
-            </p>
-            <button onClick={() => addToCart(product)} style={{ marginTop: '10px' }}>
-              Add to Cart
-            </button>
-          </div>
-        ))}
-      </div>
+      <h1 className="text-3xl font-bold mb-6">Our Products</h1>
 
-      <ShoppingCart cartItems={cart} onCheckout={handleCheckout} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Products grid */}
+        <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {products.map((product) => (
+            <Card key={product.id}>
+              <CardHeader>
+                <CardTitle>{product.name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-lg font-semibold">
+                  ${Number(product.price).toFixed(2)}
+                </CardDescription>
+              </CardContent>
+              <CardFooter>
+                <Button className="w-full" onClick={() => addToCart(product)}>
+                  Add to Cart
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+
+        {/* Shopping Cart */}
+        <div>
+          <ShoppingCart cartItems={cart} onCheckout={handleCheckout} />
+        </div>
+      </div>
     </div>
   )
 }
