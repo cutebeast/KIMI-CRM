@@ -1,4 +1,5 @@
 import { getProducts } from '@/lib/data'
+import AuthStatus from '@/components/AuthStatus'
 
 export default async function HomePage() {
   try {
@@ -20,6 +21,7 @@ export default async function HomePage() {
 
     return (
       <div>
+        <AuthStatus />
         <h1>Our Products</h1>
         
         <div style={{
