@@ -13,6 +13,11 @@ export default async function HomePage() {
       )
     }
 
+    const productsWithStringPrices = products.map(product => ({
+      ...product,
+      price: product.price.toString()
+    }))
+
     return (
       <div>
         <h1>Our Products</h1>
@@ -23,7 +28,7 @@ export default async function HomePage() {
           gap: '20px',
           justifyContent: 'center'
         }}>
-          {products.map((product: any) => (
+          {productsWithStringPrices.map((product: any) => (
             <div key={product.id} style={{
               border: '1px solid #ccc',
               borderRadius: '8px',
