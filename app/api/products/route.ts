@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getProducts } from '@/lib/data'
 
 export async function GET() {
-  console.log("--- SERVER LOG --- DATABASE_URL:", process.env.DATABASE_URL);
   try {
     const products = await getProducts()
     const serializedProducts = products.map(product => ({
