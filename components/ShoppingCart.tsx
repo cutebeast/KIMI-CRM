@@ -13,7 +13,7 @@ interface ShoppingCartProps {
 }
 
 export default function ShoppingCart({ cartItems, onCheckout }: ShoppingCartProps) {
-  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const total = cartItems.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0)
 
   return (
     <div>
