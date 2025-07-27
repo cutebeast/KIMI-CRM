@@ -25,7 +25,7 @@ export default function ShoppingCart({ cartItems, onCheckout }: ShoppingCartProp
           <ul>
             {cartItems.map((item) => (
               <li key={item.id}>
-                {item.name} - {item.quantity} x ${item.price.toFixed(2)}
+                {item.name} - {item.quantity} x ${Number(item.price).toFixed(2)}
               </li>
             ))}
           </ul>
