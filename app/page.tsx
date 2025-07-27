@@ -1,23 +1,21 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { getProducts } from '@/lib/data'
 import AuthStatus from '@/components/AuthStatus'
 import ShoppingCart from '@/components/ShoppingCart'
 
 export default function HomePage() {
   const { data: session } = useSession()
   const [cart, setCart] = useState([])
-  
-  // For now, we'll fetch products on the client side
-  // In a real app, you might want to use SWR or React Query
   const [products, setProducts] = useState([])
-  
-  // Fetch products on component mount
-  useState(() => {
-    getProducts().then(setProducts).catch(console.error)
-  })
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then(res => res.json())
+      .then(setProducts)
+      .catch(console.error)
+  }, [])
 
   const addToCart = (product: any) => {
     setCart(prevCart => {
