@@ -98,7 +98,7 @@ export default function HomePage() {
                 </CardDescription>
               </CardContent>
               <CardFooter>
-                <Button variant="destructive" className="w-full" onClick={() => addToCart(product)}>
+                <Button className="w-full" onClick={() => addToCart(product)}>
                   Add to Cart
                 </Button>
               </CardFooter>
@@ -108,7 +108,14 @@ export default function HomePage() {
 
         {/* Shopping Cart */}
         <div>
-          <ShoppingCart cartItems={cart} onCheckout={handleCheckout} />
+          <Card>
+            <CardHeader>
+              <CardTitle>Shopping Cart</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ShoppingCart cartItems={cart} onCheckout={handleCheckout} />
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
