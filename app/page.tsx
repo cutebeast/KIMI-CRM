@@ -5,10 +5,24 @@ import { useSession } from 'next-auth/react'
 import AuthStatus from '@/components/AuthStatus'
 import ShoppingCart from '@/components/ShoppingCart'
 
+interface CartItem {
+  id: string
+  name: string
+  price: string
+  quantity: number
+}
+
+interface Product {
+  id: string
+  name: string
+  price: string
+  quantity: number
+}
+
 export default function HomePage() {
   const { data: session } = useSession()
-  const [cart, setCart] = useState([])
-  const [products, setProducts] = useState([])
+  const [cart, setCart] = useState<CartItem[]>([])
+  const [products, setProducts] = useState<Product[]>([])
 
   useEffect(() => {
     fetch('/api/products')
